@@ -64,10 +64,19 @@
         }
 
         addBlock(block) {
-            if(this.isOrderValid(block))
+
+            if(this.blocks.length == 0) {
+                block.previousHash = "0000000000000000"
+                block.hash = block.generateHash()
                 this.blocks.push(block)
-            else
-                console.log("Bad Block!")
+            }
+            else {
+
+                if (this.isOrderValid(block))
+                    this.blocks.push(block)
+                else
+                    console.log("Bad Block!")
+            }
         }
 
         getNextBlock(transactions) {
@@ -111,7 +120,7 @@
 
         validateFullChain() {
             let blocks = this.blocks
-            for(i = 0; i < blocks.length - 1 ; i++){
+            for(let i = 0; i < blocks.length - 1 ; i++){
                 if(blocks[i].hash != blocks[i + 1].previousHash)
                     return false
             }
