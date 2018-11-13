@@ -25,6 +25,7 @@
             this.transactions = []
             this.difficulty = 3
             this.rate = 10
+            this.timestamp = 0
         }
 
         main(){
@@ -68,11 +69,13 @@
             if(this.blocks.length == 0) {
                 block.previousHash = "0000000000000000"
                 block.hash = block.generateHash()
+                block.timestamp = Date.now()
                 this.blocks.push(block)
             }
             else {
 
                 if (this.isOrderValid(block))
+                    block.timestamp = Date.now()
                     this.blocks.push(block)
                 else
                     console.log("Bad Block!")
