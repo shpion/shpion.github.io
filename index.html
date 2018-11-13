@@ -74,9 +74,10 @@
             }
             else {
 
-                if (this.isOrderValid(block))
+                if (this.isOrderValid(block)) {
                     block.timestamp = Date.now()
                     this.blocks.push(block)
+                }
                 else
                     console.log("Bad Block!")
             }
