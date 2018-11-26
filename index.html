@@ -1,160 +1,54 @@
 <html>
 <h1>Hello World!</h1>
 </html>
-<script src="js/sha3.min.js"></script>
+<script src="js/vendors/elliptic.js"></script>
+<script src="js/vendors/sha3.min.js"></script>
+<script src="js/block.js"></script>
+<script src="js/transaction.js"></script>
+<script src="js/blockchain.js"></script>
 <script>
 
-    const RATE = 10
+    var EC = require("elliptic").ec;
+    let ec = new EC('secp256k1');
 
-    class Transaction {
+//    let transaction = new Transaction("User_7","User_8",5)
+//    transaction.generateSignature()
 
-        constructor(from,to,amount) {
-            this.from = from
-            this.to = to
-            this.amount = amount
-        }
-    }
 
-    class Block {
-
-        constructor() {
-            this.index = 0
-            this.previousHash = ""
-            this.hash = ""
-            this.nonce = 1
-            this.transactions = []
-            this.difficulty = 3
-            this.rate = 10
-            this.timestamp = 0
-        }
-
-        main(){
-
-            if(this.rate > RATE + 3)
-                this.difficulty--
-            else if(this.rate < RATE - 3)
-                this.difficulty++
-
-            let timeStart = Date.now() / 1000
-
-            this.nonce++;
-            this.hash = this.generateHash()
-
-            while (this.hash.substring(0, this.difficulty) != '0'.repeat(this.difficulty) && this.nonce < 10000000) {
-                this.nonce++;
-                this.hash = this.generateHash()
-            }
-
-            this.rate = Date.now() / 1000 - timeStart
-        }
-
-        generateHash(){
-            return sha3_256(this.nonce + JSON.stringify(this.transactions) + this.index + this.previousHash)
-        }
-
-        addTransaction(transaction) {
-            this.transactions.push(transaction)
-        }
-    }
-
-    class Blockchain {
-
-        constructor(block) {
-            this.blocks = []
-            this.addBlock(block)
-        }
-
-        addBlock(block) {
-
-            if(this.blocks.length == 0) {
-                block.previousHash = "0000000000000000"
-                block.hash = block.generateHash()
-                block.timestamp = Date.now()
-                this.blocks.push(block)
-            }
-            else {
-
-                if (this.isOrderValid(block)) {
-                    block.timestamp = Date.now()
-                    this.blocks.push(block)
-                }
-                else
-                    console.log("Bad Block!")
-            }
-        }
-
-        getNextBlock(transactions) {
-
-            let block = new Block()
-
-            transactions.forEach(function(transaction){
-                block.addTransaction(transaction)
-            })
-
-            let previousBlock = this.getPreviousBlock()
-            block.index = this.blocks.length
-            block.previousHash = previousBlock.hash
-            block.rate = previousBlock.rate
-            block.difficulty = previousBlock.difficulty
-            block.main()
-            return block
-        }
-
-        getPreviousBlock() {
-            return this.blocks[this.blocks.length - 1]
-        }
-
-        isOrderValid(block){
-            let prevBlock = this.getPreviousBlock()
-            if(block.previousHash == prevBlock.hash)
-                return true
-
-            return false
-        }
-
-        validateBlock(hash, index){
-            if(hash != this.blocks[index].hash)
-                return false
-
-            if(hash != this.blocks[index].generateHash())
-                return false
-
-            return true
-        }
-
-        validateFullChain() {
-            let blocks = this.blocks
-            for(let i = 0; i < blocks.length - 1 ; i++){
-                if(blocks[i].hash != blocks[i + 1].previousHash)
-                    return false
-            }
-
-            return true
-        }
-    }
-
-    // create first block
-    let firstBlock = new Block()
-    let blockchain = new Blockchain(firstBlock)
-
-    // create a transaction
-    let transactions = []
-    transactions.push(new Transaction('User_1','User_2',1))
-    transactions.push(new Transaction('User_2','User_3',3))
-
-    let block = blockchain.getNextBlock(transactions)
-    blockchain.addBlock(block)
-
-    let anotherTransaction = new Transaction("User_4","User_5",10)
-    let block1 = blockchain.getNextBlock([anotherTransaction])
-    blockchain.addBlock(block1)
-
-    console.log(blockchain)
-
-    if(blockchain.validateFullChain())
-        console.log("Blockchain valid")
-    else
-        console.log("Blockchain compromised!")
+//    const RATE = 10
+//    const DIFFICULTY = 3
+//    const PRIVATE_KEY = 'shpion_private_key'
+//
+//    // create first block
+//    let firstBlock = new Block()
+//    let blockchain = new Blockchain(firstBlock)
+//
+//    // create a transaction
+//    let transactions = []
+//    transactions.push(new Transaction('User_1','User_2',1))
+//    transactions.push(new Transaction('User_2','User_3',3))
+//
+//    let block = blockchain.getNextBlock(transactions)
+//    blockchain.addBlock(block)
+//
+//    let anotherTransaction = new Transaction("User_4","User_5",10)
+//    let block1 = blockchain.getNextBlock([anotherTransaction])
+//    blockchain.addBlock(block1)
+//
+//    let transaction = new Transaction("User_7","User_8",5)
+//    let block2 = blockchain.getNextBlock([transaction])
+//    blockchain.addBlock(block2)
+//
+//    transaction = new Transaction("User_7","User_9",7)
+//    let block3 = blockchain.getNextBlock([transaction])
+//    blockchain.addBlock(block3)
+//
+//    console.log(blockchain)
+//
+//    if(blockchain.validateFullChain())
+//        console.log("Blockchain valid")
+//    else
+//        console.log("Blockchain compromised!")
 
 
 </script>
