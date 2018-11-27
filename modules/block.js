@@ -1,3 +1,6 @@
+let constants = require('./const');
+let sha256 = require('sha256')
+
 class Block {
 
     constructor() {
@@ -6,8 +9,8 @@ class Block {
         this.hash = ""
         this.nonce = 1
         this.transactions = []
-        this.difficulty = DIFFICULTY
-        this.rate = RATE
+        this.difficulty = constants.DIFFICULTY
+        this.rate = constants.RATE
         this.timestamp = 0
     }
 
@@ -29,7 +32,7 @@ class Block {
     }
 
     generateHash(){
-        return sha3_256(this.nonce + JSON.stringify(this.transactions) + this.index + this.previousHash)
+        return sha256(this.nonce + JSON.stringify(this.transactions) + this.index + this.previousHash)
     }
 
     addTransaction(transaction) {
@@ -37,9 +40,11 @@ class Block {
     }
 
     getDifficulty(){
-        if(this.rate > RATE + 10)
+        if(this.rate > constants.RATE + 10)
             this.difficulty--
-        else if(this.rate < RATE - 10)
+        else if(this.rate < constants.RATE - 10)
             this.difficulty++
     }
 }
+
+module.exports = Block;

@@ -1,3 +1,5 @@
+let Block = require("./block")
+
 class Blockchain {
 
     constructor(block) {
@@ -29,7 +31,8 @@ class Blockchain {
         let block = new Block()
 
         transactions.forEach(function(transaction){
-            block.addTransaction(transaction)
+            if(transaction.verifySignature())
+                block.addTransaction(transaction)
         })
 
         let previousBlock = this.getPreviousBlock()
@@ -73,3 +76,5 @@ class Blockchain {
         return true
     }
 }
+
+module.exports = Blockchain;
