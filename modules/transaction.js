@@ -24,6 +24,16 @@ class Transaction {
         let data = this.from + this.to + this.amount;
         return key.verify(data.toString('hex'), this.signature)
     }
+
+    validate(){
+        if(!this.verifySignature())
+            return false;
+
+
+
+
+        return true
+    }
 }
 
 module.exports = Transaction;

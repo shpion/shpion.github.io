@@ -31,7 +31,7 @@ class Blockchain {
         let block = new Block()
 
         transactions.forEach(function(transaction){
-            if(transaction.verifySignature())
+            if(transaction.validate())
                 block.addTransaction(transaction)
         })
 
