@@ -9,21 +9,21 @@ let blockchain = new Blockchain(firstBlock)
 
 // create a transaction
 let transactions = []
-transactions.push(new Transaction('User_1','User_2',1))
-transactions.push(new Transaction('User_2','User_3',3))
+transactions.push(new Transaction('User_1','User_2',30))
+transactions.push(new Transaction('User_2','User_3',10))
 
 let block = blockchain.getNextBlock(transactions)
 blockchain.addBlock(block)
 
-let anotherTransaction = new Transaction("User_4","User_5",10)
+let anotherTransaction = new Transaction("User_2","User_4",5)
 let block1 = blockchain.getNextBlock([anotherTransaction])
 blockchain.addBlock(block1)
 
-let transaction = new Transaction("User_7","User_8",5)
+let transaction = new Transaction("User_1","User_4",15)
 let block2 = blockchain.getNextBlock([transaction])
 blockchain.addBlock(block2)
 
-transaction = new Transaction("User_7","User_9",7)
+transaction = new Transaction("User_3","User_4",7)
 let block3 = blockchain.getNextBlock([transaction])
 blockchain.addBlock(block3)
 

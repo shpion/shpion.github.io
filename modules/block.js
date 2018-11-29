@@ -1,5 +1,5 @@
 let constants = require('./const');
-let sha256 = require('sha256')
+let sha256 = require('sha256');
 
 class Block {
 
@@ -36,7 +36,7 @@ class Block {
     }
 
     addTransaction(transaction) {
-        this.transactions.push(transaction)
+            this.transactions.push(transaction)
     }
 
     getDifficulty(){

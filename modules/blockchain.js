@@ -3,8 +3,9 @@ let Block = require("./block")
 class Blockchain {
 
     constructor(block) {
-        this.blocks = []
-        this.addBlock(block)
+        this.blocks = [];
+        this.worldState = {};
+        this.addBlock(block);
     }
 
     addBlock(block) {
@@ -30,16 +31,20 @@ class Blockchain {
 
         let block = new Block()
 
-        transactions.forEach(function(transaction){
-            if(transaction.validate())
-                block.addTransaction(transaction)
-        })
-
         let previousBlock = this.getPreviousBlock()
         block.index = this.blocks.length
         block.previousHash = previousBlock.hash
         block.rate = previousBlock.rate
         block.difficulty = previousBlock.difficulty
+
+        for(let i = 0; i < transactions.length; i++){
+            if(transactions[i].validate() && this.isEnoughOnBalance(transactions[i].from, transactions[i].amount)){
+                this.changeState(transactions[i].from, transactions[i].amount, false);
+                this.changeState(transactions[i].to, transactions[i].amount, true);
+                block.addTransaction(transactions[i])
+            }
+        }
+
         block.main()
         return block
     }
@@ -74,6 +79,43 @@ class Blockchain {
         }
 
         return true
+    }
+
+    getAmountFromState(address) {
+        if (this.worldState[address] !== undefined)
+            return this.worldState[address]
+
+        return -1;
+    }
+
+    isEnoughOnBalance(address, value){
+        let balance = this.getAmountFromState(address);
+
+        if(balance >= 0 && balance - value < 0)
+            return false
+
+        if(balance < 0)
+            this.createNewRecordInState(address,value);
+
+        return true
+    }
+
+    createNewRecordInState(address, value){
+        this.worldState[address] = value;
+    }
+
+    changeState(address, value, inc){
+        let balance = this.getAmountFromState(address);
+
+        if(balance < 0)
+            this.createNewRecordInState(address,value);
+
+        if(inc)
+            balance = balance + value;
+        else
+            balance = balance - value;
+
+        this.worldState[address] = balance;
     }
 }
 

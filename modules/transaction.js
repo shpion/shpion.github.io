@@ -29,9 +29,6 @@ class Transaction {
         if(!this.verifySignature())
             return false;
 
-
-
-
         return true
     }
 }
